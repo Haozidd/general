@@ -20,38 +20,20 @@
 
 <script>
 import {reqLoginToken} from "@/api";
+import {nameRule,passwordRule} from "@/utils/validate";
+import {setToken} from "@/utils/Token";
 
 export default {
   name: "",
   data() {
-    const validateName = (rule, value, callback) => {
-      let reg = /(^[a-zA-Z0-9]{4,10}$)/
-      if (value === '') {
-        callback(new Error('please input your username'))
-      } else if (!reg.test(value)) {
-        callback(new Error('the username length is 4~10 character'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      let reg = /^\S*(?=\S{6,12})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/
-      if (value === '') {
-        callback(new Error('please input your password'))
-      } else if (!reg.test(value)) {
-        callback(new Error('password need to contain 6~12 character'))
-      } else {
-        callback()
-      }
-    }
     return {
       form: {
         username: '',
         password: '',
       },
       rules: {
-        username: [{validator: validateName, trigger: 'blur'}],
-        password: [{validator: validatePassword, trigger: 'blur'}],
+        username: [{validator: nameRule, trigger: 'blur'}],
+        password: [{validator: passwordRule, trigger: 'blur'}],
       }
     }
   },
@@ -61,7 +43,7 @@ export default {
         if (valid) {
           let result = await reqLoginToken()
           if (result.code === 200) {
-            localStorage.setItem('TOKEN', result.data)
+            setToken('username',result.data)
             this.$message({message: 'Login Success', type: 'success'})
           }
           await this.$router.push('/home')
