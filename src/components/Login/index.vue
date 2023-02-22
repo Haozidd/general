@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       form: {
-        username: '',
-        password: '',
+        username: 'asbc',
+        password: 'asasAA2@@',
       },
       rules: {
         username: [{validator: nameRule, trigger: 'blur'}],
@@ -41,9 +41,8 @@ export default {
     login(form) {
       this.$refs[form].validate(async (valid) => {
         if (valid) {
-          let result = await reqLoginToken()
+          let result = await reqLoginToken(this.form)
           if (result.code === 200) {
-            setToken('username',result.data)
             this.$message({message: 'Login Success', type: 'success'})
           }
           await this.$router.push('/home')
