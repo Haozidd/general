@@ -5,19 +5,11 @@
       <div slot="header" class="clearfix">
         <span>General Background Management System</span>
       </div>
-      <el-form label-width="80px" :model="form" ref="form">
-        <el-form-item label="username" prop="username"
-                      :rules="[
-            {required:true,message:'pls input your username',trigger:'blur'},
-            {min:4,max:10,message: 'the username length is 4~10 character',trigger: 'blur'}
-            ]">
+      <el-form label-width="80px" :model="form" ref="form" :rules="rules">
+        <el-form-item label="username" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item label="password" prop="password"
-                      :rules="[
-            {required:true,message:'pls input your password',trigger:'blur'},
-            {min:6,max:10,message: 'the password length is 6~10 character',trigger: 'blur'}
-            ]">
+        <el-form-item label="password" prop="password">
           <el-input v-model="form.password"></el-input>
         </el-form-item>
         <el-button type="primary" @click="login('form')">login</el-button>
@@ -32,21 +24,45 @@ import {reqLoginToken} from "@/api";
 export default {
   name: "",
   data() {
+    const validateName = (rule, value, callback) => {
+      let reg = /(^[a-zA-Z0-9]{4,10}$)/
+      if (value === '') {
+        callback(new Error('please input your username'))
+      } else if (!reg.test(value)) {
+        callback(new Error('the username length is 4~10 character'))
+      } else {
+        callback()
+      }
+    }
+    const validatePassword = (rule, value, callback) => {
+      let reg = /^\S*(?=\S{6,12})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/
+      if (value === '') {
+        callback(new Error('please input your password'))
+      } else if (!reg.test(value)) {
+        callback(new Error('password need to contain 6~12 character'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
-        username: '222222',
-        password: '22222222',
+        username: '',
+        password: '',
+      },
+      rules: {
+        username: [{validator: validateName, trigger: 'blur'}],
+        password: [{validator: validatePassword, trigger: 'blur'}],
       }
     }
   },
   methods: {
-     login(form) {
+    login(form) {
       this.$refs[form].validate(async (valid) => {
         if (valid) {
           let result = await reqLoginToken()
-          if (result.code === 200){
-            localStorage.setItem('TOKEN',result.data)
-            this.$message({message:'Login Success',type:'success'})
+          if (result.code === 200) {
+            localStorage.setItem('TOKEN', result.data)
+            this.$message({message: 'Login Success', type: 'success'})
           }
           await this.$router.push('/home')
 
@@ -65,7 +81,7 @@ export default {
   background: transparent;
 
   .box-card {
-    width: 40%;
+    width: 500px;
     margin: 30% auto;
 
     .el-button {
