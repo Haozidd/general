@@ -60,12 +60,14 @@ export default {
 
 <style lang="scss">
 #login {
+  height: 100%;
   width: 100%;
   background: transparent;
-
   .box-card {
+    position: relative;
     width: 500px;
-    margin: 30% auto;
+    margin: auto;
+    top: 20%;
     background: transparent;
 
     .el-button {
