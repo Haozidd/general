@@ -10,7 +10,7 @@
           <el-input v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="password" prop="password">
-          <el-input v-model="form.password"></el-input>
+          <el-input type="password" v-model="form.password"></el-input>
         </el-form-item>
         <el-button type="primary" @click="login('form')">login</el-button>
       </el-form>
@@ -42,8 +42,10 @@ export default {
       this.$refs[form].validate(async (valid) => {
         if (valid) {
           let result = await reqLoginToken(this.form)
-          if (result.code === 200) {
-            this.$message({message: 'Login Success', type: 'success'})
+          if (result.status === 200) {
+            setToken('username',result.username)
+            setToken('token',result.token)
+            this.$message({message: result.message, type: 'success'})
           }
           await this.$router.push('/home')
 
@@ -64,6 +66,7 @@ export default {
   .box-card {
     width: 500px;
     margin: 30% auto;
+    background: transparent;
 
     .el-button {
       width: 100px;
