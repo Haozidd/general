@@ -9,10 +9,10 @@
     <el-table-column prop="id" label="Id" align="center"/>
     <el-table-column prop="name" label="姓名" align="center"/>
     <el-table-column prop="age" label="年龄" align="center"/>
-    <el-table-column prop="sex" label="性别" align="center"/>
+    <el-table-column prop="sex_text" label="性别" align="center"/>
     <el-table-column prop="number" label="学号" align="center"/>
     <el-table-column prop="class" label="班级" align="center"/>
-    <el-table-column prop="state" label="状态" align="center"/>
+    <el-table-column prop="state_text" label="状态" align="center"/>
     <el-table-column prop="address" label="地址" align="center"/>
     <el-table-column prop="phone" label="电话" align="center"/>
     <el-table-column label="操作" align="center">
@@ -45,6 +45,17 @@ export default {
       console.log(result)
       if (result.status===200){
         this.tableData = result.data
+        this.tableData.forEach(item=>{
+          item.sex ===1 ? item.sex_text='男' : item.sex_text = '女'
+          switch (item.state){
+            case '1': item.state_text = '已入学'
+              break
+            case '2': item.state_text = '未入学'
+              break
+            case '3': item.state_text = '休学中'
+              break
+          }
+        })
       }
     }
   }
