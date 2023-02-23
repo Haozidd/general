@@ -13,6 +13,7 @@
 
 
         <el-main>
+          <Bread></Bread>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -31,13 +32,15 @@
 import Header from "@/components/common/Header";
 import Menu from "@/components/common/Menu";
 import Footer from "@/components/common/Footer";
+import Bread from "@/components/common/Bread";
 
 export default {
   name: "Home",
   components:{
     Header,
     Menu,
-    Footer
+    Footer,
+    Bread
   }
 }
 </script>

@@ -9,7 +9,7 @@
         router
     >
       <template v-for="(childModule,index1) in homeChildrenModule">
-        <el-submenu :index="`${index1}`" :key="index1">
+        <el-submenu :key="index1">
           <template slot="title" >
             <i :class="childModule.iconClass" style="margin-right: 10px"></i>
             <span>{{childModule.name}}</span>

@@ -1,7 +1,7 @@
 <template>
 <div id="Header" style="height: 100%">
   <el-header>
-    <div class="title">General Background Management System</div>
+    <el-link class="title" :underline="false" @click="$router.push('/home')">General Background Management System</el-link>
     <div class="user">{{name}}</div>
   </el-header>
 </div>
@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 #Header{
-  background-color: gray;
+  background-color: white;
 }
 .el-header{
   display: flex;
