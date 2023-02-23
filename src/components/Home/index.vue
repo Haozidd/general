@@ -14,7 +14,7 @@
 
         <el-main style="display: flex;flex-direction: column">
           <Bread></Bread>
-          <router-view style="flex: 1"></router-view>
+          <router-view></router-view>
         </el-main>
       </el-container>
 
@@ -50,6 +50,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 
 
 

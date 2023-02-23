@@ -1,7 +1,18 @@
 <template>
 <div id="studentList" style="height: 100%;">
+  <el-form :inline="true" :model="formInline" class="demo-form-inline" size="medium">
+    <el-form-item label="">
+      <el-input v-model="formInline.name" placeholder="请输入你要查询的名字"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="find">查询</el-button>
+      <el-button type="primary" @click="reset">重置</el-button>
+    </el-form-item>
+  </el-form>
+
+
   <el-table
-      :data="tableData"
+      :data="sliceTableData"
       border
       style="width: 100%;height: 100%;"
 
@@ -16,52 +27,78 @@
     <el-table-column prop="address" label="地址" align="center"/>
     <el-table-column prop="phone" label="电话" align="center"/>
     <el-table-column label="操作" align="center">
-      <template>
-        <el-button type="danger" size="mini">删除</el-button>
+      <template v-slot="scope">
+        <el-button type="danger" size="mini" @click="del(scope)">删除</el-button>
       </template>
     </el-table-column>
-
-
   </el-table>
+
+  <Pagination :goods-total="total" :page-size="pageSize" :pages-continuous="3" @buttonJump="buttonJump"></Pagination>
+
 </div>
 </template>
 
 <script>
-import {reqStudentList} from "@/api";
-
+import {reqDeleteStudent, reqStudentList} from "@/api";
+import Pagination from "@/components/Pagination";
+import {mapGetters,mapState} from "vuex";
 export default {
   name: "",
-  data(){
-    return{
-      tableData: []
+  components:{
+    Pagination
+  },
+data(){
+  return{
+    pageNo:1,
+    pageSize:5,
+    formInline:{
+      name:''
+    }
+  }
+},
+  mounted() {
+    this.getData()
+  },
+  computed:{
+    ...mapState({
+      tableData: state => state.studentList.studentList,
+      total:state => state.studentList.total
+    }),
+    sliceTableData(){
+      return this.tableData.slice(((this.pageNo-1)*this.pageSize),(this.pageNo)*this.pageSize)
     }
   },
-  mounted() {
-    this.getStudentList()
-  },
   methods:{
-    async getStudentList(){
-      let result = await reqStudentList()
-      console.log(result)
-      if (result.status===200){
-        this.tableData = result.data
-        this.tableData.forEach(item=>{
-          item.sex ===1 ? item.sex_text='男' : item.sex_text = '女'
-          switch (item.state){
-            case '1': item.state_text = '已入学'
-              break
-            case '2': item.state_text = '未入学'
-              break
-            case '3': item.state_text = '休学中'
-              break
-          }
-        })
-      }
+    find(){
+      this.getData(this.formInline)
+    },
+
+    reset(){
+      this.getData()
+    },
+    async getData(params={}){
+        await this.$store.dispatch('getStudentList',params)
+    },
+    del(scope){
+       reqDeleteStudent(scope.row.id).then(res=>{
+         console.log(res.message)
+         this.getData()
+      })
+
+    },
+    buttonJump(pageNo){
+      this.pageNo=pageNo
     }
   }
 }
 </script>
 
 <style scoped>
-
+.demo-form-inline{
+  padding: 24px 0 0 20px ;
+  text-align: left;
+}
+::before{
+  height: 0;
+}
 </style>

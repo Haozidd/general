@@ -6,6 +6,7 @@ import router from '@/router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/mock/mockServe'
+import store from "@/store";
 
 Vue.use(ElementUI)
 
@@ -15,5 +16,6 @@ Vue.prototype.axios = axios
 
 new Vue({
   render: h => h(App),
+  store,
   router
 }).$mount('#app')
