@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 #Header{
-  background-color: salmon;
+  background-color: gray;
 }
 .el-header{
   display: flex;

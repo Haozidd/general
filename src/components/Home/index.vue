@@ -4,14 +4,20 @@
       <el-header>
         <Header/>
       </el-header>
-      <el-container>
-        <el-aside>
+
+
+      <el-container >
+        <el-aside style="width: 220px;">
           <Menu/>
         </el-aside>
+
+
         <el-main>
-          Main
+          <router-view></router-view>
         </el-main>
       </el-container>
+
+
       <el-footer>
         <Footer/>
       </el-footer>
@@ -27,7 +33,7 @@ import Menu from "@/components/common/Menu";
 import Footer from "@/components/common/Footer";
 
 export default {
-  name: "",
+  name: "Home",
   components:{
     Header,
     Menu,

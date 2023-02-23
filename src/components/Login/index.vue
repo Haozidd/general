@@ -24,12 +24,12 @@ import {nameRule,passwordRule} from "@/utils/validate";
 import {setToken} from "@/utils/Token";
 
 export default {
-  name: "",
+  name: "Login",
   data() {
     return {
       form: {
-        username: 'asbc',
-        password: 'asasAA2@@',
+        username: 'admin',
+        password: 'abcABC123!',
       },
       rules: {
         username: [{validator: nameRule, trigger: 'blur'}],
