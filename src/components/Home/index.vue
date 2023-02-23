@@ -7,14 +7,14 @@
 
 
       <el-container >
-        <el-aside style="width: 220px;">
+        <el-aside style="width: 180px;">
           <Menu/>
         </el-aside>
 
 
-        <el-main>
+        <el-main style="display: flex;flex-direction: column">
           <Bread></Bread>
-          <router-view></router-view>
+          <router-view style="flex: 1"></router-view>
         </el-main>
       </el-container>
 

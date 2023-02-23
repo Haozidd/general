@@ -29,7 +29,7 @@ export default {
     return {
       form: {
         username: 'admin',
-        password: 'abcABC123!',
+        password: 'abcABC123!ABC',
       },
       rules: {
         username: [{validator: nameRule, trigger: 'blur'}],

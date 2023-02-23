@@ -20,6 +20,11 @@ export default new Router({
                     component: () => import ("@/pages/Students"),
                     children:[
                         {
+                            path: '/home/students/studentList',
+                            name:'学生列表',
+                            component: () => import ("@/pages/Students/StudentList"),
+                        },
+                        {
                             path: '/home/students/infoList',
                             name:'信息列表',
                             component: () => import ("@/pages/Students/InfoList"),
@@ -29,11 +34,7 @@ export default new Router({
                             name:'信息列表管理',
                             component: () => import ("@/pages/Students/InfoManage"),
                         },
-                        {
-                            path: '/home/students/studentList',
-                            name:'学生列表',
-                            component: () => import ("@/pages/Students/StudentList"),
-                        },
+
                         {
                             path: '/home/students/workList',
                             name:'作业列表',
