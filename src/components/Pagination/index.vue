@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
     <!--    Front-->
-    <button :disabled="pageNo===1" @click="jump(pageNo+-1)">上一页</button>
+    <button :disabled="pageNo===1" class="last" @click="jump(pageNo+-1)"><span>上一页</span></button>
     <button v-show="beginAndEndNumber.begin>1" @click="jump(1)">1</button>
     <button disabled v-show="beginAndEndNumber.begin>2">···</button>
 
