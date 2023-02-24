@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {getToken} from "@/utils/Token";
+import {getToken} from "@/utils/getToken";
 
 export default {
   name: "",

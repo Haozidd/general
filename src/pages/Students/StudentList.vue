@@ -28,7 +28,7 @@
     <el-table-column prop="phone" label="电话" align="center"/>
     <el-table-column label="操作" align="center">
       <template v-slot="scope">
-        <el-button type="danger" size="mini" @click="del(scope)">删除</el-button>
+        <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {reqDeleteStudent, reqStudentList} from "@/api";
+import {reqApi2Data, reqDeleteStudent, reqStudentList} from "@/api";
 import Pagination from "@/components/Pagination";
 import {mapGetters,mapState} from "vuex";
 export default {
@@ -79,12 +79,7 @@ data(){
     async getData(params={}){
         await this.$store.dispatch('getStudentList',params)
     },
-    del(scope){
-       reqDeleteStudent(scope.row.id).then(res=>{
-         console.log(res.message)
-         this.getData()
-      })
-
+    del(id){
     },
     buttonJump(pageNo){
       this.pageNo=pageNo

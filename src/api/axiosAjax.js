@@ -1,7 +1,7 @@
 import axios from "axios";
 import nprogress from 'nprogress';
 import "nprogress/nprogress.css"
-import {getToken} from "@/utils/Token";
+import {getToken} from "@/utils/getToken";
 import {Message} from "element-ui";
 
 const axiosAjax = axios.create({

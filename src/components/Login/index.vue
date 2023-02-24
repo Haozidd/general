@@ -21,7 +21,7 @@
 <script>
 import {reqLoginToken} from "@/api";
 import {nameRule,passwordRule} from "@/utils/validate";
-import {setToken} from "@/utils/Token";
+import {setToken} from "@/utils/getToken";
 
 export default {
   name: "Login",
