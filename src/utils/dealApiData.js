@@ -1,4 +1,4 @@
-import {reqApi2Data, reqLoginToken} from "@/api";
+import {reqApi2Data, reqLoginToken, reqStudentList} from "@/api";
 import {setToken} from "@/utils/getToken";
 
 export const dealInfoData = {
@@ -49,7 +49,36 @@ export const dealInfoData = {
         }
     }
 }
-export const dealStudentData = {}
+export const dealStudentData = {
+    url:'/students',
+    getStudentList:function (root,params,url=this.url){
+       this.dealPromise({root,params,url,type:'get',method:'get'})
+    },
+    deleteStudentData:function (root,id,url=this.url){
+        this.dealPromise({root,url,id,type:'delete',method:'delete'})
+    },
+    dealPromise:async function ({root,params,url,id,type,method}){
+        try {
+            let result = await reqApi2Data({url,params,method,id})
+            if (result.status === 200){
+                switch (type) {
+                    case 'get':
+                        root.commit('dealStudentList',result)
+                        break
+                    case 'delete':
+                        this.getStudentList(root)
+                        break
+                }
+                return 'ok'
+            }else {
+                return Promise.reject(new Error(result.message))
+            }
+        }catch (e) {
+            console.log(e)
+        }
+
+    }
+}
 export const dealLoginData = {
     url:'/login',
     reqLogin:async function (root,data,url=this.url){

@@ -1,4 +1,5 @@
 import {reqStudentList} from "@/api";
+import {dealStudentData} from "@/utils/dealApiData";
 
 const state={
     studentList:[],
@@ -22,15 +23,12 @@ const mutations={
     },
 }
 const actions={
-    async getStudentList(context,params){
-        let result = await reqStudentList(params)
-        if (result.status === 200){
-            context.commit('dealStudentList',result)
-            return 'ok'
-        }else {
-            return Promise.reject(new Error(result.message))
-        }
+    getStudentList(context,params){
+        dealStudentData.getStudentList(context,params)
     },
+    deleteStudentData(context,id){
+        dealStudentData.deleteStudentData(context,id)
+    }
 }
 const getters={
 }

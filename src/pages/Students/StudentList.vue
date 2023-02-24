@@ -5,8 +5,8 @@
       <el-input v-model="formInline.name" placeholder="请输入你要查询的名字"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="find">查询</el-button>
-      <el-button type="primary" @click="reset">重置</el-button>
+      <el-button type="primary" @click="clickEvent('search')">查询</el-button>
+      <el-button type="primary" @click="clickEvent('get')">重置</el-button>
     </el-form-item>
   </el-form>
 
@@ -28,7 +28,7 @@
     <el-table-column prop="phone" label="电话" align="center"/>
     <el-table-column label="操作" align="center">
       <template v-slot="scope">
-        <el-button type="danger" size="mini" @click="del(scope.row.id)">删除</el-button>
+        <el-button type="danger" size="mini" @click="clickEvent('delete',scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import {reqApi2Data, reqDeleteStudent, reqStudentList} from "@/api";
 import Pagination from "@/components/Pagination";
 import {mapGetters,mapState} from "vuex";
 export default {
@@ -69,17 +68,21 @@ data(){
     }
   },
   methods:{
-    find(){
-      this.getData(this.formInline)
+    getData(params){
+      this.$store.dispatch('getStudentList',params)
     },
-
-    reset(){
-      this.getData()
-    },
-    async getData(params={}){
-        await this.$store.dispatch('getStudentList',params)
-    },
-    del(id){
+    clickEvent(type,id){
+      switch (type){
+        case 'search':
+          this.getData(this.formInline)
+          break
+        case 'get':
+          this.getData()
+          break
+        case 'delete':
+          this.$store.dispatch('deleteStudentData',id)
+          break
+      }
     },
     buttonJump(pageNo){
       this.pageNo=pageNo
