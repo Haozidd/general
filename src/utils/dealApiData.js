@@ -1,4 +1,5 @@
-import {reqApi2Data} from "@/api";
+import {reqApi2Data, reqLoginToken} from "@/api";
+import {setToken} from "@/utils/getToken";
 
 export const dealInfoData = {
     url: '/info',
@@ -15,10 +16,9 @@ export const dealInfoData = {
     getInfoList: function (root, url = this.url) {
         this.dealPromise({root, url, type: 'get', method: 'get'})
     },
-
     dealPromise: async function ({root, url, data, id, method, type}) {
         try {
-            let result = await reqApi2Data({url, data, method, id})
+            let result = await reqApi2Data({url,stringifyData:data, method, id})
             if (result.status === 200) {
                 switch (type) {
                     case 'add':
@@ -50,3 +50,23 @@ export const dealInfoData = {
     }
 }
 export const dealStudentData = {}
+export const dealLoginData = {
+    url:'/login',
+    reqLogin:async function (root,data,url=this.url){
+        try {
+            let result = await reqApi2Data({url,data,method:'post'})
+            if (result.status === 200) {
+                setToken('username', result.username)
+                setToken('token', result.token)
+                root.$message({message: result.message, type: 'success'})
+                await root.$router.push('/home')
+                return 'ok'
+            }else {
+                console.log(result.message)
+            }
+        }catch (error){
+            console.log(error)
+        }
+
+    }
+}

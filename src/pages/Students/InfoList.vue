@@ -75,10 +75,9 @@
 
 <script>
 import Pagination from "@/components/Pagination";
-import {reqAddInfo, reqModifyInfo,} from "@/api";
 import {uuid} from "mockjs/src/mock/random/misc";
 import {nanoid} from "nanoid";
-import {dealInfoData} from "@/utils/dealData";
+import {dealInfoData} from "@/utils/dealApiData";
 
 export default {
   name: "",

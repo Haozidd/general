@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import {reqLoginToken} from "@/api";
-import {nameRule,passwordRule} from "@/utils/validate";
+import {nameRule, passwordRule} from "@/utils/validate";
 import {setToken} from "@/utils/getToken";
+import {dealLoginData} from "@/utils/dealApiData";
 
 export default {
   name: "Login",
@@ -39,18 +39,11 @@ export default {
   },
   methods: {
     login(form) {
-      this.$refs[form].validate(async (valid) => {
+      this.$refs[form].validate((valid) => {
         if (valid) {
-          let result = await reqLoginToken(this.form)
-          if (result.status === 200) {
-            setToken('username',result.username)
-            setToken('token',result.token)
-            this.$message({message: result.message, type: 'success'})
-          }
-          await this.$router.push('/home')
-
+          dealLoginData.reqLogin(this, this.form)
         } else {
-          console.error(this.form)
+          console.error('validate fail')
         }
       })
     }
@@ -63,6 +56,7 @@ export default {
   height: 100%;
   width: 100%;
   background: transparent;
+
   .box-card {
     position: relative;
     width: 500px;
