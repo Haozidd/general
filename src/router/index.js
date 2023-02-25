@@ -30,20 +30,9 @@ export default new Router({
                             component: () => import ("@/pages/Students/InfoList"),
                         },
                         {
-                            path: '/home/students/infoManage',
-                            name:'信息列表管理',
-                            component: () => import ("@/pages/Students/InfoManage"),
-                        },
-
-                        {
                             path: '/home/students/workList',
                             name:'作业列表',
                             component: () => import ("@/pages/Students/WorkList"),
-                        },
-                        {
-                            path: '/home/students/workManage',
-                            name:'作业列表管理',
-                            component: () => import ("@/pages/Students/WorkManage"),
                         }
                     ]
                 },

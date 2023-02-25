@@ -2,10 +2,9 @@ import {reqApi2Data, reqLoginToken, reqStudentList} from "@/api";
 import {setToken} from "@/utils/getToken";
 import {nanoid} from "nanoid";
 class DealData{
-    constructor(root,params, id, type, method) {
+    constructor(root,params, id, method) {
         this.root=root
         this.method = method;
-        this.type=type
     }
     showReturnMessage(result){
         if(result.status === 200) {
@@ -26,8 +25,8 @@ class DealData{
 }
 export class DealInfo extends DealData{
     url='/info';
-    constructor(root, params, id, type, method) {
-        super(root, params, id, type, method);
+    constructor(root, params, id, method) {
+        super(root, params, id, method);
     }
     async addInfoData(data) {
         data.id=nanoid()
@@ -55,8 +54,8 @@ export class DealInfo extends DealData{
 }
 export class DealStudent extends DealData{
     url='/students';
-    constructor(root, params, id, type, method) {
-        super(root, params, id, type, method);
+    constructor(root, params, id, method) {
+        super(root, params, id, method);
     }
 
     async getStudentList(params) {
@@ -70,8 +69,8 @@ export class DealStudent extends DealData{
 }
 export class DealLogin extends DealData{
     url='/login'
-    constructor(root, params, id, type, method) {
-        super(root, params, id, type, method);
+    constructor(root, params, id, method) {
+        super(root, params, id, method);
     }
     async reqLogin(data) {
         let result = await super.receiveApi2ReturnData({url:this.url,method:'post',data})
@@ -83,5 +82,18 @@ export class DealLogin extends DealData{
         }catch (e) {
             console.log(e)
         }
+    }
+}
+export class DealHomework extends DealData{
+    url='/works'
+    constructor(root, params, id, method){
+        super(root, params, id, method);
+    }
+    async getHomeworkList(params){
+        let result = await super.receiveApi2ReturnData({url:this.url,method:'get',params})
+        super.showReturnMessage(result)
+        result.data.forEach(item=>item.completed?item.completed_text='完成':item.completed_text='未完成')
+        this.root.tableData = result.data
+        this.root.total =result.total
     }
 }
