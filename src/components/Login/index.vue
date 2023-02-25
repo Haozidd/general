@@ -20,8 +20,7 @@
 
 <script>
 import {nameRule, passwordRule} from "@/utils/validate";
-import {setToken} from "@/utils/getToken";
-import {dealLoginData} from "@/utils/dealApiData";
+import {DealLogin} from "@/utils/dealApiData";
 
 export default {
   name: "Login",
@@ -41,7 +40,7 @@ export default {
     login(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          dealLoginData.reqLogin(this, this.form)
+          new DealLogin(this).reqLogin(this.form)
         } else {
           console.error('validate fail')
         }

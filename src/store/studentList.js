@@ -1,5 +1,5 @@
 import {reqStudentList} from "@/api";
-import {dealStudentData} from "@/utils/dealApiData";
+import {DealInfo, DealStudent} from "@/utils/dealApiData";
 
 const state={
     studentList:[],
@@ -24,10 +24,10 @@ const mutations={
 }
 const actions={
     getStudentList(context,params){
-        dealStudentData.getStudentList(context,params)
+        new DealStudent(context).getStudentList(params)
     },
     deleteStudentData(context,id){
-        dealStudentData.deleteStudentData(context,id)
+        new DealStudent(context).deleteStudentData(id)
     }
 }
 const getters={

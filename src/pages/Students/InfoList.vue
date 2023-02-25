@@ -74,10 +74,7 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination";
-import {uuid} from "mockjs/src/mock/random/misc";
-import {nanoid} from "nanoid";
-import {dealInfoData} from "@/utils/dealApiData";
+import {DealInfo} from "@/utils/dealApiData";
 
 export default {
   name: "",
@@ -110,13 +107,16 @@ export default {
     }
   },
   mounted() {
-    dealInfoData.getInfoList(this)
+    new DealInfo(this).getInfoList()
   },
   methods: {
     edit(form) {
       this.status = false
-      this.form = {...form}
       this.dialogFormVisible = true
+      this.$nextTick(()=>{
+        this.form = {...form}
+      })
+
       this.confirmState = 2
     },
     del(id) {
@@ -126,7 +126,7 @@ export default {
         showCancelButton: true,
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            dealInfoData.deleteInfoData(this,id)
+            new DealInfo(this).deleteInfoData(id)
             done()
           } else {
             done()
@@ -136,18 +136,19 @@ export default {
 
     },
     addInfo() {
+      this.status=true
       this.dialogFormVisible = true
-      this.$refs.form.resetFields()
+      this.$refs['form'].resetFields()
       this.confirmState = 1
     },
     confirm() {
       this.$refs.form.validate(valid => {
         if (valid) {
           if (this.confirmState === 1) {
-            this.form.id=nanoid()
-            dealInfoData.addInfoData(this,this.form)
+            // dealInfoData.addInfoData(this,this.form)
+            new DealInfo(this).addInfoData(this.form)
           } else {
-            dealInfoData.modifyInfoData(this,this.form)
+            new DealInfo(this).modifyInfoData(this.form)
           }
         }
       })

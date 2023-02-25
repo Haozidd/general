@@ -1,101 +1,87 @@
 import {reqApi2Data, reqLoginToken, reqStudentList} from "@/api";
 import {setToken} from "@/utils/getToken";
-
-export const dealInfoData = {
-    url: '/info',
-
-    addInfoData: function (root, data, url = this.url) {
-        this.dealPromise({root, data, url, type: 'add', method: 'post'})
-    },
-    deleteInfoData: function (root, id, url = this.url) {
-        this.dealPromise({root,id,url,type:'delete',method:'delete'})
-    },
-    modifyInfoData: function (root, data, url = this.url) {
-        this.dealPromise({root, data, url, type: 'modify', method: 'put'})
-    },
-    getInfoList: function (root, url = this.url) {
-        this.dealPromise({root, url, type: 'get', method: 'get'})
-    },
-    dealPromise: async function ({root, url, data, id, method, type}) {
+import {nanoid} from "nanoid";
+class DealData{
+    constructor(root,params, id, type, method) {
+        this.root=root
+        this.method = method;
+        this.type=type
+    }
+    showReturnMessage(result){
+        if(result.status === 200) {
+            this.root.$message({type: "success", message: result.message})
+            return 'ok'
+        }else{
+            this.root.$message({type: "error", message: result.message})
+            return Promise.reject(new Error(result.message))
+        }
+    }
+    receiveApi2ReturnData({url,data,method,id,params,stringifyData}){
         try {
-            let result = await reqApi2Data({url,stringifyData:data, method, id})
-            if (result.status === 200) {
-                switch (type) {
-                    case 'add':
-                        console.log(result)
-                        root.$message({type: "success", message: result.message})
-                        root.tableData = result.data
-                        root.dialogFormVisible = false
-                        break
-                    case 'delete':
-                        root.$message({type: "success", message: result.message})
-                        this.getInfoList(root)
-                        break
-                    case 'modify':
-                        root.$message({type: "success", message: result.message})
-                        this.getInfoList(root)
-                        root.dialogFormVisible = false
-                        break
-                    case 'get':
-                        root.tableData = result.data
-                        break
-                }
-                return 'ok'
-            } else {
-                console.log(result.message)
-            }
+            return reqApi2Data({url, stringifyData,data, method, id,params})
         } catch (error) {
-            console.log(error)
+            new Error(error)
         }
     }
 }
-export const dealStudentData = {
-    url:'/students',
-    getStudentList:function (root,params,url=this.url){
-       this.dealPromise({root,params,url,type:'get',method:'get'})
-    },
-    deleteStudentData:function (root,id,url=this.url){
-        this.dealPromise({root,url,id,type:'delete',method:'delete'})
-    },
-    dealPromise:async function ({root,params,url,id,type,method}){
+export class DealInfo extends DealData{
+    url='/info';
+    constructor(root, params, id, type, method) {
+        super(root, params, id, type, method);
+    }
+    async addInfoData(data) {
+        data.id=nanoid()
+        let result = await super.receiveApi2ReturnData({url:this.url,stringifyData:data,method:'post'})
+        super.showReturnMessage(result)
+        this.root.tableData = result.data
+        this.root.dialogFormVisible = false
+    }
+    async deleteInfoData(id) {
+        let result = await super.receiveApi2ReturnData({url:this.url,method:'delete',id})
+        super.showReturnMessage(result)
+        await this.getInfoList()
+    }
+    async modifyInfoData(data) {
+        let result = await super.receiveApi2ReturnData({stringifyData:data,url:this.url,method:'put'})
+        super.showReturnMessage(result)
+        this.root.dialogFormVisible = false
+        await this.getInfoList()
+    }
+    async getInfoList() {
+        let result = await super.receiveApi2ReturnData({url:this.url,method:'get'})
+        super.showReturnMessage(result)
+        this.root.tableData = result.data
+    }
+}
+export class DealStudent extends DealData{
+    url='/students';
+    constructor(root, params, id, type, method) {
+        super(root, params, id, type, method);
+    }
+
+    async getStudentList(params) {
+        let result = await super.receiveApi2ReturnData({url:this.url,method:'get',params})
+        this.root.commit('dealStudentList',result)
+    }
+    async deleteStudentData(id) {
+        await super.receiveApi2ReturnData({url:this.url,method:'delete',id})
+        await this.getStudentList()
+    }
+}
+export class DealLogin extends DealData{
+    url='/login'
+    constructor(root, params, id, type, method) {
+        super(root, params, id, type, method);
+    }
+    async reqLogin(data) {
+        let result = await super.receiveApi2ReturnData({url:this.url,method:'post',data})
         try {
-            let result = await reqApi2Data({url,params,method,id})
-            if (result.status === 200){
-                switch (type) {
-                    case 'get':
-                        root.commit('dealStudentList',result)
-                        break
-                    case 'delete':
-                        this.getStudentList(root)
-                        break
-                }
-                return 'ok'
-            }else {
-                return Promise.reject(new Error(result.message))
-            }
+            await this.showReturnMessage(result)
+            setToken('username', result.username)
+            setToken('token', result.token)
+            await this.root.$router.push('/home')
         }catch (e) {
             console.log(e)
         }
-
-    }
-}
-export const dealLoginData = {
-    url:'/login',
-    reqLogin:async function (root,data,url=this.url){
-        try {
-            let result = await reqApi2Data({url,data,method:'post'})
-            if (result.status === 200) {
-                setToken('username', result.username)
-                setToken('token', result.token)
-                root.$message({message: result.message, type: 'success'})
-                await root.$router.push('/home')
-                return 'ok'
-            }else {
-                console.log(result.message)
-            }
-        }catch (error){
-            console.log(error)
-        }
-
     }
 }
